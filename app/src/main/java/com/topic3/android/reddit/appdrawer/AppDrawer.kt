@@ -23,8 +23,9 @@ import androidx.compose.material.Divider
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
-
+import androidx.compose.material.Icon
 import com.topic3.android.reddit.theme.RedditThemeSettings
+import androidx.constraintlayout.compose.ConstraintLayout
 
 /**
  * Представляет корневую композицию для панели приложений, используемой на экранах.
@@ -93,7 +94,48 @@ private fun ProfileInfoItem(
   textResourceId: Int,
   modifier: Modifier
 ) {
-  //TODO add your code here
+  val colors = MaterialTheme.colors
+
+  ConstraintLayout(modifier = modifier) {
+    val (iconRef, amountRef, titleRef) = createRefs()
+    val itemModifier = Modifier
+
+    Icon(
+      contentDescription = stringResource(id = textResourceId),
+      imageVector = iconAsset,
+      tint = Color.Blue,
+      modifier = itemModifier
+        .constrainAs(iconRef) {
+          centerVerticallyTo(parent)
+          start.linkTo(parent.start)
+        }
+        .padding(start = 16.dp)
+    )
+    Text(
+      text = stringResource(id = textResourceId),
+      color = colors.primaryVariant,
+      fontSize = 10.sp,
+      modifier = itemModifier
+        .padding(start = 8.dp)
+        .constrainAs(amountRef){
+          top.linkTo(iconRef.top)
+          start.linkTo(iconRef.end)
+          bottom.linkTo(titleRef.top)
+        }
+    )
+    Text(
+      text = stringResource(id = textResourceId),
+      color = Color.Gray,
+      fontSize = 10.sp,
+      modifier = itemModifier
+        .padding(start = 8.dp)
+        .constrainAs(titleRef){
+          top.linkTo(amountRef.bottom)
+          start.linkTo(iconRef.end)
+          bottom.linkTo(iconRef.bottom)
+        }
+    )
+  }
 }
 
 /**
