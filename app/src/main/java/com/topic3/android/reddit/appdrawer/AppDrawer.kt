@@ -26,6 +26,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.material.Icon
 import com.topic3.android.reddit.theme.RedditThemeSettings
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.compose.material.icons.filled.Star
+import androidx.constraintlayout.compose.Dimension
 
 /**
  * Представляет корневую композицию для панели приложений, используемой на экранах.
@@ -83,8 +85,44 @@ private fun AppDrawerHeader() {
 }
 
 @Composable
-fun ProfileInfo() {
-  //TODO add your code here
+fun ProfileInfo(modifier: Modifier = Modifier) {
+  ConstraintLayout (
+    modifier = modifier
+      .fillMaxWidth()
+      .padding(top = 16.dp)
+  ) {
+    val (karmaItem, divider, ageItem) = createRefs()
+    val colors = MaterialTheme.colors
+
+    ProfileInfoItem(
+      Icons.Filled.Star,
+      R.string.default_karma_amount,
+      R.string.karma,
+      modifier = modifier.constrainAs(karmaItem) {
+        centerVerticallyTo(parent)
+        start.linkTo(parent.start)
+      }
+    )
+    Divider(
+      modifier = modifier
+        .width(1.dp)
+        .constrainAs(divider) {
+          centerVerticallyTo(karmaItem)
+          centerHorizontallyTo(parent)
+          height = Dimension.fillToConstraints
+        },
+      color = colors.onSurface.copy(alpha = .2f)
+    )
+    ProfileInfoItem(
+      iconAsset = Icons.Filled.ShoppingCart,
+      amountResourceId = R.string.default_reddit_age_amount,
+      textResourceId = R.string.reddit_age,
+      modifier = modifier.constrainAs(ageItem){
+        start.linkTo(divider.end)
+        centerVerticallyTo(parent)
+      }
+    )
+  }
 }
 
 @Composable
